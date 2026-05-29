@@ -55,10 +55,12 @@ def get_genre(db: Session, genre_id: int):
 
 def create_playlist(
     db: Session,
-    playlist: schemas.PlaylistCreate
+    playlist: schemas.PlaylistCreate,
+    owner_id: int | None = None
 ):
     db_playlist = models.Playlist(
-        **playlist.model_dump()
+        **playlist.model_dump(),
+        owner_id=owner_id
     )
 
     db.add(db_playlist)

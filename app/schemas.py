@@ -73,6 +73,7 @@ class PlaylistCreate(PlaylistBase):
 
 class PlaylistResponse(PlaylistBase):
     id: int
+    owner_id: int | None = None
     songs: list[SongSimple] = []
 
     class Config:

@@ -118,18 +118,18 @@ def get_playlists(
 
 
 @app.post(
-    "/playlists/{playlist_id}/songs/{song_id}",
+    "/playlists",
     response_model=schemas.PlaylistResponse
 )
-def add_song_to_playlist(
-    playlist_id: int,
-    song_id: int,
+def create_playlist(
+    playlist: schemas.PlaylistCreate,
+    owner_id: int | None = None,
     db: Session = Depends(get_db)
 ):
-    return crud.add_song_to_playlist(
+    return crud.create_playlist(
         db,
-        playlist_id,
-        song_id
+        playlist,
+        owner_id
     )
 
 

@@ -111,4 +111,9 @@ class User(Base):
         back_populates="owner"
     )
 
+    playlists = relationship(
+        "Playlist",
+        back_populates="owner"
+    )
+
 
