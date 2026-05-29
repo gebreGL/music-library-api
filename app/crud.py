@@ -91,6 +91,9 @@ def add_song_to_playlist(
     if not playlist or not song:
         return None
 
+    if song in playlist.songs:
+        return playlist
+
     playlist.songs.append(song)
 
     db.commit()
