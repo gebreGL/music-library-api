@@ -54,8 +54,9 @@ class Song(Base):
     genre = relationship("Genre")
 
     playlists = relationship(
-        "Playlist",
-        secondary=playlist_songs
+    "Playlist",
+    secondary=playlist_songs,
+    back_populates="songs"
     )
 
 
@@ -67,6 +68,7 @@ class Playlist(Base):
     description = Column(String, nullable=True)
 
     songs = relationship(
-        "Song",
-        secondary=playlist_songs
+    "Song",
+    secondary=playlist_songs,
+    back_populates="playlists"
     )

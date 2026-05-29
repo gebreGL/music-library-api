@@ -69,3 +69,31 @@ def create_playlist(
 
 def get_playlists(db: Session):
     return db.query(models.Playlist).all()
+
+
+def add_song_to_playlist(
+    db: Session,
+    playlist_id: int,
+    song_id: int
+):
+    playlist = (
+        db.query(models.Playlist)
+        .filter(models.Playlist.id == playlist_id)
+        .first()
+    )
+
+    song = (
+        db.query(models.Song)
+        .filter(models.Song.id == song_id)
+        .first()
+    )
+
+    if not playlist or not song:
+        return None
+
+    playlist.songs.append(song)
+
+    db.commit()
+    db.refresh(playlist)
+
+    return playlist

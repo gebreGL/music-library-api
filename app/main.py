@@ -111,3 +111,19 @@ def get_playlists(
     db: Session = Depends(get_db)
 ):
     return crud.get_playlists(db)
+
+
+@app.post(
+    "/playlists/{playlist_id}/songs/{song_id}",
+    response_model=schemas.PlaylistResponse
+)
+def add_song_to_playlist(
+    playlist_id: int,
+    song_id: int,
+    db: Session = Depends(get_db)
+):
+    return crud.add_song_to_playlist(
+        db,
+        playlist_id,
+        song_id
+    )

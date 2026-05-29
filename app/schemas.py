@@ -54,6 +54,14 @@ class GenreResponse(GenreBase):
         from_attributes = True
 
 
+class SongSimple(BaseModel):
+    id: int
+    title: str
+
+    class Config:
+        from_attributes = True
+
+
 class PlaylistBase(BaseModel):
     name: str
     description: str | None = None
@@ -65,6 +73,8 @@ class PlaylistCreate(PlaylistBase):
 
 class PlaylistResponse(PlaylistBase):
     id: int
+    songs: list[SongSimple] = []
 
     class Config:
         from_attributes = True
+
