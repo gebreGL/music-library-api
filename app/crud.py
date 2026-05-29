@@ -56,7 +56,7 @@ def get_genre(db: Session, genre_id: int):
 def create_playlist(
     db: Session,
     playlist: schemas.PlaylistCreate,
-    owner_id: int | None = None
+    owner_id: int
 ):
     db_playlist = models.Playlist(
         **playlist.model_dump(),

@@ -112,17 +112,6 @@ def get_genre(
     return crud.get_genre(db, genre_id)
 
 
-@app.post(
-    "/playlists",
-    response_model=schemas.PlaylistResponse
-)
-def create_playlist(
-    playlist: schemas.PlaylistCreate,
-    db: Session = Depends(get_db)
-):
-    return crud.create_playlist(db, playlist)
-
-
 @app.get(
     "/playlists",
     response_model=list[schemas.PlaylistResponse]
@@ -139,13 +128,13 @@ def get_playlists(
 )
 def create_playlist(
     playlist: schemas.PlaylistCreate,
-    owner_id: int | None = None,
+    current_user: models.User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     return crud.create_playlist(
         db,
         playlist,
-        owner_id
+        current_user.id
     )
 
 
