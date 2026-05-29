@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 
 from . import models, schemas
+from .auth import hash_password
 
 
 def create_artist(db: Session, artist: schemas.ArtistCreate):
@@ -100,3 +101,22 @@ def add_song_to_playlist(
     db.refresh(playlist)
 
     return playlist
+
+
+def create_user(
+    db: Session,
+    user: schemas.UserCreate
+):
+    db_user = models.User(
+        username=user.username,
+        email=user.email,
+        hashed_password=hash_password(
+            user.password
+        )
+    )
+
+    db.add(db_user)
+    db.commit()
+    db.refresh(db_user)
+
+    return db_user

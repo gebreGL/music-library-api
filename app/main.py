@@ -127,3 +127,17 @@ def add_song_to_playlist(
         playlist_id,
         song_id
     )
+
+
+@app.post(
+    "/register",
+    response_model=schemas.UserResponse
+)
+def register(
+    user: schemas.UserCreate,
+    db: Session = Depends(get_db)
+):
+    return crud.create_user(
+        db,
+        user
+    )
