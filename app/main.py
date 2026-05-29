@@ -26,6 +26,21 @@ def get_db():
         db.close()
 
 
+def get_current_user(
+    username: str = Depends(get_current_username),
+    db: Session = Depends(get_db)
+):
+    user = crud.get_user_by_username(db, username)
+
+    if user is None:
+        raise HTTPException(
+            status_code=401,
+            detail="User not found"
+        )
+
+    return user
+
+
 @app.get("/")
 def root():
     return {"message": "Welcome to Music Library API"}
@@ -185,12 +200,8 @@ def login(
     }
 
 
-@app.get("/me")
+@app.get("/me", response_model=schemas.UserResponse)
 def get_me(
-    username: str = Depends(
-        get_current_username
-    )
+    current_user: models.User = Depends(get_current_user)
 ):
-    return {
-        "username": username
-    }
+    return current_user
