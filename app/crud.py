@@ -50,3 +50,22 @@ def get_genres(db: Session):
 
 def get_genre(db: Session, genre_id: int):
     return db.query(models.Genre).filter(models.Genre.id == genre_id).first()
+
+
+def create_playlist(
+    db: Session,
+    playlist: schemas.PlaylistCreate
+):
+    db_playlist = models.Playlist(
+        **playlist.model_dump()
+    )
+
+    db.add(db_playlist)
+    db.commit()
+    db.refresh(db_playlist)
+
+    return db_playlist
+
+
+def get_playlists(db: Session):
+    return db.query(models.Playlist).all()

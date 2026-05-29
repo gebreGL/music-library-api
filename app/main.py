@@ -90,3 +90,24 @@ def get_genre(
     db: Session = Depends(get_db)
 ):
     return crud.get_genre(db, genre_id)
+
+
+@app.post(
+    "/playlists",
+    response_model=schemas.PlaylistResponse
+)
+def create_playlist(
+    playlist: schemas.PlaylistCreate,
+    db: Session = Depends(get_db)
+):
+    return crud.create_playlist(db, playlist)
+
+
+@app.get(
+    "/playlists",
+    response_model=list[schemas.PlaylistResponse]
+)
+def get_playlists(
+    db: Session = Depends(get_db)
+):
+    return crud.get_playlists(db)

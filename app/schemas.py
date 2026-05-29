@@ -52,3 +52,19 @@ class GenreResponse(GenreBase):
 
     class Config:
         from_attributes = True
+
+
+class PlaylistBase(BaseModel):
+    name: str
+    description: str | None = None
+
+
+class PlaylistCreate(PlaylistBase):
+    pass
+
+
+class PlaylistResponse(PlaylistBase):
+    id: int
+
+    class Config:
+        from_attributes = True

@@ -1,7 +1,24 @@
-from sqlalchemy import Column, Integer, String
-from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy import (
+    Column,
+    Integer,
+    String,
+    ForeignKey,
+    Table
+)
+
 from sqlalchemy.orm import relationship
+
 from .database import Base
+
+
+# TABLA INTERMEDIA MANY-TO-MANY
+
+playlist_songs = Table(
+    "playlist_songs",
+    Base.metadata,
+    Column("playlist_id", ForeignKey("playlists.id"), primary_key=True),
+    Column("song_id", ForeignKey("songs.id"), primary_key=True),
+)
 
 
 class Artist(Base):
@@ -12,6 +29,15 @@ class Artist(Base):
     country = Column(String, nullable=True)
     genre = Column(String, nullable=True)
 
+
+class Genre(Base):
+    __tablename__ = "genres"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, nullable=False, unique=True)
+    description = Column(String, nullable=True)
+
+
 class Song(Base):
     __tablename__ = "songs"
 
@@ -21,16 +47,26 @@ class Song(Base):
     year = Column(Integer, nullable=True)
     duration_seconds = Column(Integer, nullable=True)
 
-    artist_id = Column(Integer, ForeignKey("artists.id"), nullable=False)
-    artist = relationship("Artist")
+    artist_id = Column(Integer, ForeignKey("artists.id"))
+    genre_id = Column(Integer, ForeignKey("genres.id"))
 
-    genre_id = Column(Integer, ForeignKey("genres.id"), nullable=True)
+    artist = relationship("Artist")
     genre = relationship("Genre")
 
+    playlists = relationship(
+        "Playlist",
+        secondary=playlist_songs
+    )
 
-class Genre(Base):
-    __tablename__ = "genres"
+
+class Playlist(Base):
+    __tablename__ = "playlists"
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, nullable=False, unique=True)
+    name = Column(String, nullable=False)
     description = Column(String, nullable=True)
+
+    songs = relationship(
+        "Song",
+        secondary=playlist_songs
+    )
