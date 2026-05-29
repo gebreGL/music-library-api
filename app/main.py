@@ -3,6 +3,10 @@ from sqlalchemy.orm import Session
 
 from . import crud, models, schemas
 from .database import Base, SessionLocal, engine
+from .auth import (
+    create_access_token,
+    verify_password
+)
 
 Base.metadata.create_all(bind=engine)
 
@@ -141,3 +145,34 @@ def register(
         db,
         user
     )
+
+
+@app.post("/login")
+def login(
+    user: schemas.UserLogin,
+    db: Session = Depends(get_db)
+):
+    db_user = crud.get_user_by_username(
+        db,
+        user.username
+    )
+
+    if not db_user:
+        return {"error": "Invalid credentials"}
+
+    if not verify_password(
+        user.password,
+        db_user.hashed_password
+    ):
+        return {"error": "Invalid credentials"}
+
+    token = create_access_token(
+        {
+            "sub": db_user.username
+        }
+    )
+
+    return {
+        "access_token": token,
+        "token_type": "bearer"
+    }
