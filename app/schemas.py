@@ -16,3 +16,22 @@ class ArtistResponse(ArtistBase):
 
     class Config:
         from_attributes = True
+
+
+class SongBase(BaseModel):
+    title: str
+    album: str | None = None
+    year: int | None = None
+    duration_seconds: int | None = None
+    artist_id: int
+
+
+class SongCreate(SongBase):
+    pass
+
+
+class SongResponse(SongBase):
+    id: int
+
+    class Config:
+        from_attributes = True
