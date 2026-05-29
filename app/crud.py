@@ -32,3 +32,21 @@ def get_songs(db: Session):
 
 def get_song(db: Session, song_id: int):
     return db.query(models.Song).filter(models.Song.id == song_id).first()
+
+
+def create_genre(db: Session, genre: schemas.GenreCreate):
+    db_genre = models.Genre(**genre.model_dump())
+
+    db.add(db_genre)
+    db.commit()
+    db.refresh(db_genre)
+
+    return db_genre
+
+
+def get_genres(db: Session):
+    return db.query(models.Genre).all()
+
+
+def get_genre(db: Session, genre_id: int):
+    return db.query(models.Genre).filter(models.Genre.id == genre_id).first()

@@ -67,3 +67,26 @@ def get_song(
     db: Session = Depends(get_db)
 ):
     return crud.get_song(db, song_id)
+
+
+@app.post("/genres", response_model=schemas.GenreResponse)
+def create_genre(
+    genre: schemas.GenreCreate,
+    db: Session = Depends(get_db)
+):
+    return crud.create_genre(db, genre)
+
+
+@app.get("/genres", response_model=list[schemas.GenreResponse])
+def get_genres(
+    db: Session = Depends(get_db)
+):
+    return crud.get_genres(db)
+
+
+@app.get("/genres/{genre_id}", response_model=schemas.GenreResponse)
+def get_genre(
+    genre_id: int,
+    db: Session = Depends(get_db)
+):
+    return crud.get_genre(db, genre_id)

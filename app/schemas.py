@@ -24,6 +24,7 @@ class SongBase(BaseModel):
     year: int | None = None
     duration_seconds: int | None = None
     artist_id: int
+    genre_id: int | None = None
 
 
 class SongCreate(SongBase):
@@ -31,6 +32,22 @@ class SongCreate(SongBase):
 
 
 class SongResponse(SongBase):
+    id: int
+
+    class Config:
+        from_attributes = True
+
+
+class GenreBase(BaseModel):
+    name: str
+    description: str | None = None
+
+
+class GenreCreate(GenreBase):
+    pass
+
+
+class GenreResponse(GenreBase):
     id: int
 
     class Config:

@@ -20,6 +20,17 @@ class Song(Base):
     album = Column(String, nullable=True)
     year = Column(Integer, nullable=True)
     duration_seconds = Column(Integer, nullable=True)
-    artist_id = Column(Integer, ForeignKey("artists.id"), nullable=False)
 
+    artist_id = Column(Integer, ForeignKey("artists.id"), nullable=False)
     artist = relationship("Artist")
+
+    genre_id = Column(Integer, ForeignKey("genres.id"), nullable=True)
+    genre = relationship("Genre")
+
+
+class Genre(Base):
+    __tablename__ = "genres"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, nullable=False, unique=True)
+    description = Column(String, nullable=True)
