@@ -67,10 +67,20 @@ class Playlist(Base):
     name = Column(String, nullable=False)
     description = Column(String, nullable=True)
 
+    owner_id = Column(
+        Integer,
+        ForeignKey("users.id")
+    )
+
+    owner = relationship(
+        "User",
+        back_populates="playlists"
+    )
+
     songs = relationship(
-    "Song",
-    secondary=playlist_songs,
-    back_populates="playlists"
+        "Song",
+        secondary=playlist_songs,
+        back_populates="playlists"
     )
 
 
@@ -95,3 +105,10 @@ class User(Base):
         String,
         nullable=False
     )
+
+    playlists = relationship(
+        "Playlist",
+        back_populates="owner"
+    )
+
+
