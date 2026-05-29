@@ -1,12 +1,13 @@
-from fastapi import Depends, FastAPI
+from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.orm import Session
-
+from fastapi.security import OAuth2PasswordRequestForm
 from . import crud, models, schemas
 from .database import Base, SessionLocal, engine
 from .auth import (
     create_access_token,
     verify_password
 )
+from .auth import get_current_username
 
 Base.metadata.create_all(bind=engine)
 
@@ -149,22 +150,28 @@ def register(
 
 @app.post("/login")
 def login(
-    user: schemas.UserLogin,
+    form_data: OAuth2PasswordRequestForm = Depends(),
     db: Session = Depends(get_db)
 ):
     db_user = crud.get_user_by_username(
         db,
-        user.username
+        form_data.username
     )
 
     if not db_user:
-        return {"error": "Invalid credentials"}
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid credentials"
+        )
 
     if not verify_password(
-        user.password,
+        form_data.password,
         db_user.hashed_password
     ):
-        return {"error": "Invalid credentials"}
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid credentials"
+        )
 
     token = create_access_token(
         {
@@ -175,4 +182,15 @@ def login(
     return {
         "access_token": token,
         "token_type": "bearer"
+    }
+
+
+@app.get("/me")
+def get_me(
+    username: str = Depends(
+        get_current_username
+    )
+):
+    return {
+        "username": username
     }
