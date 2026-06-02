@@ -155,6 +155,17 @@ def register(
     user: schemas.UserCreate,
     db: Session = Depends(get_db)
 ):
+    existing_user = crud.get_user_by_username(
+        db,
+        user.username
+    )
+
+    if existing_user:
+        raise HTTPException(
+            status_code=400,
+            detail="Username already registered"
+        )
+
     return crud.create_user(
         db,
         user
