@@ -216,3 +216,8 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+music_library.db
+venv/
+__pycache__/
+.pytest_cache/
