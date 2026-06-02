@@ -13,8 +13,17 @@ Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
     title="Music Library API",
-    description="REST API for managing artists, songs, playlists and favorite tracks.",
-    version="0.1.0",
+    description="""
+    A RESTful API for managing artists, songs, genres and playlists.
+
+    Features:
+    - JWT Authentication
+    - OAuth2 Authorization
+    - Playlist Ownership
+    - Automated Testing
+    - Docker Support
+    """,
+    version="1.0.0"
 )
 
 
