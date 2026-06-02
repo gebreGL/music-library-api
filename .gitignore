@@ -218,6 +218,4 @@ __marimo__/
 .streamlit/secrets.toml
 
 music_library.db
-venv/
-__pycache__/
-.pytest_cache/
+*.db
